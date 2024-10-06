@@ -1,0 +1,125 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 500,
+  "height": 400,
+  "title": "Cost of Living vs Quality of Life",
+  "data": {
+    "url": "Data.csv"
+  },
+  "params": [
+    {
+      "name": "Continent_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "Asia",
+          "Europe",
+          "North America",
+          "Oceania",
+          "South America",
+          "Africa"
+        ],
+        "labels": [
+          "Show All",
+          "Asia",
+          "Europe",
+          "North America",
+          "Oceania",
+          "South America",
+          "Africa"
+        ],
+        "name": "Continent Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "Continent_selection == null || datum.Continent == Continent_selection"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "Cost of Bread",
+          "type": "quantitative",
+          "title": "Cost per Loaf of Bread (AUD)"
+        },
+        "y": {
+          "field": "Cost of Apartment",
+          "type": "quantitative",
+          "title": "Cost of Apartment"
+        },
+        "color": {
+          "field": "Continent",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Asia",
+              "Europe",
+              "North America",
+              "Oceania",
+              "South America",
+              "Africa"
+            ],
+            "range": [
+              "#377eb8",  
+              "#e41a1c",  
+              "#4daf4a",  
+              "#ff7f00", 
+              "#984ea3",  
+              "#a6d85a"   
+            ]
+          },
+          "title": "Continent"
+        },
+        "size": {
+          "field": "Quality of Life Index",
+          "type": "quantitative",
+          "title": "Quality of Life Index"
+        },
+        "tooltip": [
+          {"field": "Country", "type": "nominal", "title": "Country"},
+          {"field": "Cost of Bread", "type": "quantitative", "title": "Cost per Loaf of Bread (AUD)"},
+          {"field": "Cost of Apartment", "type": "quantitative", "title": "Cost of Apartment"},
+          {"field": "Quality of Life Index", "type": "quantitative", "title": "Quality of Life Index"},
+          {"field": "Continent", "type": "nominal", "title": "Continent"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "dx": 0,
+        "dy": -15
+      },
+      "encoding": {
+        "x": {"field": "Cost of Bread", "type": "quantitative"},
+        "y": {"field": "Cost of Apartment", "type": "quantitative"},
+        "text": {"field": "Country"},
+        "color": {"value": "black"}
+      },
+      "transform": [
+        {
+          "filter": {
+            "field": "Country",
+            "oneOf": [
+              "Australia", 
+              "United States", 
+              "China", 
+              "India", 
+              "Switzerland", 
+              "Hong Kong"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Cost of Living by Country",
+    "width": 800,
+    "height": 400,
+    "projection": { "type": "equalEarth" },
+    "layer": [
+        {
+            "data": {
+                "url": "ne_110m.json",
+                "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+            },
+            "mark": { "type": "geoshape", "fill": "#D3D3D3" },
+            "encoding": {
+                "color": { "value": "#D3D3D3" }
+            }
+        },
+        {
+            "data": {
+                "url": "ne_110m.json",
+                "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+            },
+            "transform": [
+                {
+                    "lookup": "properties.NAME",
+                    "from": {
+                        "data": { "url": "CostOfLiving.csv" },
+                        "key": "Country",
+                        "fields": ["Cost of Living Index"]
+                    }
+                }
+            ],
+            "mark": { "type": "geoshape" },
+            "encoding": {
+                "color": {
+                    "field": "Cost of Living Index",
+                    "type": "quantitative",
+                    "scale": { "type": "linear", "scheme": "blues" },
+                    "title": "Cost of Living Index"
+                },
+                "tooltip": [
+                    { "field": "properties.NAME", "type": "nominal", "title": "Country" },
+                    { "field": "Cost of Living Index", "type": "quantitative", "title": "Cost of Living Index" }
+                ]
+            }
+        },
+        {
+            "data": {
+                "values": [
+                    { "text": "Gray indicates countries where data is not available", "x": 0.5, "y": 0.05 }
+                ]
+            },
+            "mark": { "type": "text", "fontSize": 14, "align": "center" },
+            "encoding": {
+                "text": { "field": "text", "type": "nominal" },
+                "x": { "field": "x", "type": "quantitative", "scale": { "domain": [0, 1] }, "axis": null },
+                "y": { "field": "y", "type": "quantitative", "scale": { "domain": [0, 1] }, "axis": null }
+            }
+        }
+    ]
+}
